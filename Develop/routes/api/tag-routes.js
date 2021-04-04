@@ -34,16 +34,11 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
-  Tag.update(
-    {
-      include: [id],
+  Tag.update(req.body, {
+    where: {
+      id: req.params.id,
     },
-    {
-      where: {
-        tag_name: req.params.tag_name,
-      },
-    }
-  )
+  })
   .then((updatedTag) => {
     res.json(updatedTag);
   })

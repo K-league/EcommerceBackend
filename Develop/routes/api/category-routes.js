@@ -16,8 +16,11 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
-  Category.findByPk({
-    include: [id],
+  Category.findByPk(req.params.id, { include: [ Product ]})
+  .then((category) => res.json(category))
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
   })
   
 });
@@ -35,21 +38,16 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
-  Category.update(
-    {
-      include: [id]
+  Category.update(req.body, {
+    where: {
+      id: req.params.id,
     },
-    {
-      where: {
-        category_id: req.params.category_id,
-      },
-    }
-  )
+  })
   .then((updatedCategory) => {
     res.json(updatedCategory);
   })
   .catch((err) => {
-    console.log(err);
+    console.log(err); 
     res.json(err);
   });
 });
